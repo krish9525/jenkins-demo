@@ -1,37 +1,41 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
-    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
-    stage('Install Dependencies') {
-    steps {
-        dir('mern-jenkins-app') {
-            sh '/usr/bin/npm run install:all'
+        stage('Install Dependencies') {
+            steps {
+                dir('mern-jenkins-app') {
+                    sh '/usr/bin/npm run install:all'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                dir('mern-jenkins-app') {
+                    sh '/usr/bin/npm run test'
+                }
+            }
+        }
+
+        stage('Build Client') {
+            steps {
+                dir('mern-jenkins-app') {
+                    sh '/usr/bin/npm run build'
+                }
+            }
         }
     }
-}
 
-    stage('Run Tests') {
-      steps {
-        sh 'npm run test'
-      }
+    post {
+        success {
+            archiveArtifacts artifacts: 'mern-jenkins-app/client/dist/**', fingerprint: true
+        }
     }
-
-    stage('Build Client') {
-      steps {
-        sh 'npm run build'
-      }
-    }
-  }
-
-  post {
-    always {
-      archiveArtifacts artifacts: 'client/dist/**', onlyIfSuccessful: true
-    }
-  }
 }
