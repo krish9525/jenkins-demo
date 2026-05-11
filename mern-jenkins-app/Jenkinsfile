@@ -10,7 +10,7 @@ pipeline {
 
     stage('Install Dependencies') {
       steps {
-        sh 'npm run install:all'
+        sh '/usr/bin/npm run install:all'
       }
     }
 
