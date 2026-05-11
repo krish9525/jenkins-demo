@@ -9,10 +9,12 @@ pipeline {
     }
 
     stage('Install Dependencies') {
-      steps {
-        sh '/usr/bin/npm run install:all'
-      }
+    steps {
+        dir('mern-jenkins-app') {
+            sh '/usr/bin/npm run install:all'
+        }
     }
+}
 
     stage('Run Tests') {
       steps {
